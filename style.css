@@ -9,7 +9,6 @@ html {
 }
 body {
     margin: auto;
-    width: 100%;
 }
 header {
     display: flex;
@@ -28,7 +27,8 @@ header {
 }
 .windowContent {
     height: 100%;
-    width: 100%;
+    width: 85%;
+    padding: 20px;
 }
 .libraryContent {
     position: relative;
@@ -56,10 +56,32 @@ header {
     background: white;
     color: black;
 }
+.newBookForm {
+    visibility: hidden;
+    border: white solid 2px;
+    background: gray;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    position: absolute;
+    left: 200px;
+    width: 150px;
+    z-index: 3;
+}
+.closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
 
 @media (min-width: 600px) {
     .windowContent {
         margin: auto;
         width: 50%;
+    }
+    .newBookForm {
+        width: 300px;
     }
 }

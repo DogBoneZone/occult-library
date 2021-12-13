@@ -12,6 +12,8 @@ function Book(title, author, content, read) {
 
 function createBookList() {
     // Add Index Attribute
+    document.querySelectorAll(".book").forEach((book) => {book.remove()})
+    
     for (let book of library) {
         let element = document.createElement('div')
         element.setAttribute('data-index', library.indexOf(book))
@@ -26,8 +28,10 @@ function showBookList() {
     bookList.style.visibility === "visible" ? bookList.style.visibility = "hidden" : bookList.style.visibility = "visible"
 }
 
-function addBook() {
-    let addBook = document.querySelector("#addBook")
+function addBook(title, author, content, read) {
+    const newBook = new Book(title, author, content, read)
+    library.push(newBook)
+    createBookList()
 }
 
 function displayActiveContent(book) {
@@ -42,20 +46,25 @@ function displayActiveContent(book) {
     } else {windowContent.append(element)}
 }
 
+function displayNewBookForm() {
+    let toggleFormArray = [document.querySelector("#closeForm"), document.querySelector("#addBook")]
+    let newBookForm = document.querySelector(".newBookForm")
+    for (let btn of toggleFormArray) {
+        btn.addEventListener("click", () => {
+            newBookForm.style.visibility === "visible" ? newBookForm.style.visibility = "hidden" : newBookForm.style.visibility = "visible"
+        })
+    }
+}
+
 // Listeners
 function addListeners() {
     document.querySelector("#bookListBtn").addEventListener("click", () => {
         showBookList();
     })
 
-    document.querySelector(".windowContent").addEventListener("click", () => {
-        showBookList();
-    })
-
     // Set Active Book Class
     let bookList = document.querySelectorAll(".book")
     for (let book of bookList) {
-        console.log(book)
         book.addEventListener("click", (e) => {
             let activeBookList = document.querySelectorAll(".activeBook")
             if (activeBookList.length === 0) {
@@ -68,6 +77,17 @@ function addListeners() {
             }
         })
     }
+
+    displayNewBookForm()
+
+    document.querySelector("#submitBook").addEventListener("click", () => {
+        let title = document.querySelector("#newTitle").value 
+        let author = document.querySelector("#newAuthor").value
+        let content = document.querySelector("#newContent").value
+        let read = document.querySelector("#newCompleted").checked
+
+        addBook(title, author, content, read)
+    })
 }
 
 createBookList()
