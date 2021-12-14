@@ -2,30 +2,47 @@
     font-family: 'Occult';
     src: url(./fonts/dark-black.regular.otf);
 }
+
 html {
-    font-family: 'Occult';
-    background: black;
+    background: rgb(35, 37, 39);
     color: white;
 }
+button {
+    font-family: 'Occult';
+}
 body {
+    position: relative;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-around;
 }
 header {
+    font-family: 'Occult';
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    background: gray;
+    background: #222f3e;
     padding: 0 10px;
     font-size: small;
     width: 100%;
 }
 .headerButtons {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     width: 100%;
+    padding: 0 0 10px 0;
+    gap: 5px;
+}
+.headerButtons button {
+    padding: 10px;
 }
 .windowContent {
+    position: relative;
+}
+.readingArea {
     height: 100%;
     width: 85%;
     padding: 20px;
@@ -36,52 +53,103 @@ header {
 }
 .bookListHeader {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-evenly;    
+    margin: auto;
     align-items: center;
+    background:rgb(15, 15, 15);
 }
 .bookList {
     visibility: hidden;
     position: fixed;
     left: 0;
-    z-index: 3;
     height: 100%;
-    background: gray;
-    max-width: 320px;
+    background: #222f3e;
+    width: 300px;
+}.blurBackground {
+    backdrop-filter: blur(6px);
+}
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 10px;
+    padding: 5px 15px;
 }
-.activeBook {
-    background: white;
-    color: black;
+.book:hover {
+    background: rgba(128, 128, 128, 0.603);
+}
+.book #removeBook {
+    position: absolute;
+    right: 0;
 }
 .newBookForm {
     visibility: hidden;
-    border: white solid 2px;
-    background: gray;
+    position: absolute;
+    width: 320px;
+    margin: auto;
+    top: 0;
+    left: 0;
+    border: white solid 1px;
+    background: #222f3e;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 10px;
-    position: absolute;
-    left: 200px;
-    width: 150px;
     z-index: 3;
+}
+.newBookForm input {
+    width: 300px;
+}
+.newBookForm button {
+    padding: 5px;
+    margin: 10px 0;
+}
+.newBookForm .singleRow {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px 0;
+}
+.newBookForm .singleRow div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+.newBookForm .singleRow input {
+    width: 50%;
 }
 .closeButton {
     position: absolute;
     top: 0;
     right: 0;
 }
+#missingInfo {
+    background: rgba(161, 17, 17, 0.616);
+    color: white;
+    visibility: hidden;
+}
 
+/* Styling for screens larger than 600px wide */
 @media (min-width: 600px) {
-    .windowContent {
+    .readingArea {
         margin: auto;
         width: 50%;
     }
     .newBookForm {
-        width: 300px;
+        width: 600px;
+        margin: auto;
+    }
+    .header {
+        font-size: xx-large;
+    }
+    .headerButtons {
+        position: absolute;
+        top: 15px;
+        justify-content: start;
     }
 }
