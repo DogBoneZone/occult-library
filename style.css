@@ -41,6 +41,7 @@ header {
 }
 .windowContent {
     position: relative;
+    background:rgba(9, 54, 100, 0.466);
 }
 .readingArea {
     height: 100%;
