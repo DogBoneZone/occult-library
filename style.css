@@ -65,9 +65,12 @@ header {
     height: 100%;
     background: #222f3e;
     width: 300px;
-}.blurBackground {
-    backdrop-filter: blur(6px);
 }
+.activeBook {
+    background: white;
+    color: black;
+}
+.book {
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -143,9 +146,6 @@ header {
     .newBookForm {
         width: 600px;
         margin: auto;
-    }
-    .header {
-        font-size: xx-large;
     }
     .headerButtons {
         position: absolute;
