@@ -1,7 +1,4 @@
-let library = [
-    {title: 'Dogwood', author: 'Alex H.', content: 'This story is about a dog lost in the woods. He dies in the end.', pageCount: 295, read: false},
-    {title: 'Asseating Lessons', author: 'You', content: 'This book teaches the graceful art of eating ass.', pageCount: 450, read: false}
-];
+let library = [];
 
 function Book(title, author, content, pageCount, read) {
     this.title = title
@@ -60,9 +57,11 @@ function createBookList() {
 
 function addBook(title, author, content, pageCount, read) {
     const newBook = new Book(title, author, content, pageCount, read)
-    console.log(newBook)
     library.push(newBook)
     createBookList()
+
+    let newBookIndex = library.length - 1
+    document.querySelector(`[data-index='${newBookIndex}']`).click()
 }
 
 function displayNewBookForm() {
@@ -70,16 +69,68 @@ function displayNewBookForm() {
     let newBookForm = document.querySelector(".newBookForm")
     for (let btn of toggleFormArray) {
         btn.addEventListener("click", (e) => {
-            newBookForm.style.visibility === "visible" ? newBookForm.style.visibility = "hidden" : newBookForm.style.visibility = "visible"
+            if (newBookForm.style.visibility === 'visible') {
+                newBookForm.style.visibility = "hidden"
+                newBookForm.style.display = 'none'
+            } else {
+                newBookForm.style.visibility = "visible"
+                newBookForm.style.display = 'flex'
+            }
             if (e.target === document.querySelector('#closeForm')) {document.querySelector('#missingInfo').style.visibility = 'hidden'}
         })
     }
 }
 
-// Listeners
 function showBookList() {
     let bookList = document.querySelector(".bookList")
     bookList.style.visibility === "visible" ? bookList.style.visibility = "hidden" : bookList.style.visibility = "visible"
+}
+
+function displayActiveContent(book) {
+    // Create Book Content
+    let readingArea = document.querySelector('.readingArea')
+    let bookObject = library[book.dataset.index]
+    let bookTitleElement = document.createElement('H1')
+    let bookTitleText = document.createTextNode(bookObject.title)
+    let bookAuthorDiv = document.createElement('div')
+    let hLine = document.createElement('hr')
+    bookAuthorDiv.setAttribute('class', 'activeAuthor')
+    bookAuthorDiv.textContent = `by ${bookObject.author}`
+    bookTitleElement.append(bookTitleText)
+    bookTitleElement.append(bookAuthorDiv)
+    bookTitleElement.append(hLine)
+
+
+
+    // Create Book status tags
+    let tagElement = document.createElement('div')
+    let pageCountTag = document.createElement('div')
+    pageCountTag.textContent = `Length: ${bookObject.pageCount} pages`
+    let readStatusTag = document.createElement('button')
+    readStatusTag.setAttribute('class', 'readStatusButton')
+    readStatusTag.textContent = bookObject.read ? 'Completed' : 'Unfinished'
+    tagElement.append(readStatusTag, pageCountTag)
+    tagElement.setAttribute('class', 'bookTags')
+
+    // Create div for Book Content and Tags to go into
+    let element = document.createElement('div')
+    element.setAttribute('id', 'activeContent')
+    element.textContent = bookObject.content
+    if (readingArea.childNodes.length > 0) {
+        while (readingArea.firstChild) {readingArea.removeChild(readingArea.firstChild)}
+        readingArea.append(tagElement, bookTitleElement, element)
+    } else {readingArea.append(tagElement, bookTitleElement, element)}
+
+    listenReadStatusButton()
+}
+
+// Listeners
+
+function listenHideListOnClickAway() {
+    document.querySelector('.windowContent').addEventListener('click', () => {
+        let bookList = document.querySelector('.bookList')
+        if (bookList.style.visibility === 'visible') {bookList.style.visibility = 'hidden'}
+    })
 }
 
 function listenBookListBtn() {
@@ -88,20 +139,6 @@ function listenBookListBtn() {
     })
 }
 
-function displayActiveContent(book) {
-    let readingArea = document.querySelector('.readingArea')
-    let bookObject = library[book.dataset.index]
-    let bookTitleElement = document.createElement('H1')
-    let bookTitleText = document.createTextNode(bookObject.title)
-    bookTitleElement.append(bookTitleText)
-    let element = document.createElement('div')
-    element.setAttribute('id', 'activeContent')
-    element.textContent = bookObject.content
-    if (readingArea.childNodes.length > 0) {
-        while (readingArea.firstChild) {readingArea.removeChild(readingArea.firstChild)}
-        readingArea.append(bookTitleElement, element)
-    } else {readingArea.append(bookTitleElement, element)}
-}
 function listenActiveBook() {
     let bookList = document.querySelectorAll(".book")
     for (let book of bookList) {
@@ -115,8 +152,23 @@ function listenActiveBook() {
                 book.classList.toggle("activeBook")
                 displayActiveContent(book)
             }
+            document.querySelector('.bookList').style.visibility = 'hidden'
         })
     }
+}
+
+function listenReadStatusButton () {
+    let readButton = document.querySelector('.readStatusButton')
+    let activeBookIndex = document.querySelector('.activeBook').dataset.index
+    readButton.addEventListener('click', () => {
+        library[activeBookIndex].read === true ? library[activeBookIndex].read = false : library[activeBookIndex].read = true
+        readButton.textContent === 'Completed' ? readButton.textContent = 'Unfinished' : readButton.textContent = 'Completed'
+        if (readButton.textContent === 'Completed') {
+            readButton.style.backgroundColor = 'lightgreen'
+        } else {
+            readButton.style.backgroundColor = 'gray'
+        }
+    })
 }
 
 function listenSubmitBook() {
@@ -140,6 +192,7 @@ function listenSubmitBook() {
 // Initial Function Calls
 createBookList()
 listenBookListBtn()
+listenHideListOnClickAway()
 listenActiveBook()
 listenSubmitBook()
 displayNewBookForm()

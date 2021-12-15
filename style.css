@@ -3,32 +3,55 @@
     src: url(./fonts/dark-black.regular.otf);
 }
 
+/* ====================
+
+    Global Styles
+
+   ==================== */
+
 html {
     background: rgb(35, 37, 39);
     color: white;
+    padding: 0;
+    margin: 0;
 }
 button {
     font-family: 'Occult';
 }
 body {
     position: relative;
-    margin: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: space-around;
+    background: linear-gradient(rgba(9, 54, 100, 0.466), rgba(4, 19, 34, 0.466),rgb(35, 37, 39));
+    margin: 0;
+    padding: 0;
 }
+h1 {
+    font-family: 'Occult'
+}
+
+/* ====================
+
+    Header Styles
+
+   ==================== */
+
 header {
     font-family: 'Occult';
+    position: sticky;
+    z-index: 2;
+    top: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     background: #222f3e;
-    padding: 0 10px;
     font-size: small;
     width: 100%;
 }
+
 .headerButtons {
     display: flex;
     justify-content: center;
@@ -37,17 +60,15 @@ header {
     gap: 5px;
 }
 .headerButtons button {
-    padding: 10px;
+    padding: 5px;
 }
-.windowContent {
-    position: relative;
-    background:rgba(9, 54, 100, 0.466);
-}
-.readingArea {
-    height: 100%;
-    width: 85%;
-    padding: 20px;
-}
+
+/* ====================
+
+    Book List Sidebar
+
+   ==================== */
+
 .libraryContent {
     position: relative;
     left: 0;
@@ -62,10 +83,10 @@ header {
 .bookList {
     visibility: hidden;
     position: fixed;
-    left: 0;
-    height: 100%;
     background: #222f3e;
+    border: white solid 1px;
     width: 300px;
+    height: 100%;
 }
 .activeBook {
     background: white;
@@ -76,40 +97,83 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 5px 15px;
+}
+.bookText {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 5px 15px;
 }
 .book:hover {
     background: rgba(128, 128, 128, 0.603);
 }
+
 .book #removeBook {
     position: absolute;
     right: 0;
 }
+
+/* ====================
+
+    Reading Area/Window Content
+
+   ==================== */
+
+.windowContent {
+    position: relative;
+}
+
+.readingArea {
+    padding: 20px;
+    z-index: 0;
+}
+
+.bookTags {
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    color: rgb(175, 175, 175);
+}
+
+.readStatusButton {
+    font-size: smaller;
+    width: 75px;
+}
+
+.activeAuthor {
+    font-size: 14px;
+    color: gray;
+}
+
+/* ====================
+
+    New Book Form
+
+   ==================== */
+
 .newBookForm {
     visibility: hidden;
-    position: absolute;
-    width: 320px;
+    position: sticky;
+    width: 300px;
     margin: auto;
-    top: 0;
-    left: 0;
     border: white solid 1px;
     background: #222f3e;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10px;
     z-index: 3;
 }
 .newBookForm input {
-    width: 300px;
+    width: 250px;
 }
 .newBookForm button {
     padding: 5px;
     margin: 10px 0;
+}
+.newBookForm textarea {
+    width: 250px;
+    height: 250px;
 }
 .newBookForm .singleRow {
     display: flex;
@@ -138,8 +202,17 @@ header {
     visibility: hidden;
 }
 
+/* ====================
+
+    Styling for Desktop/Tablet
+
+   ==================== */
+
 /* Styling for screens larger than 600px wide */
 @media (min-width: 600px) {
+    .newBookForm input, .newBookForm textarea {
+        width: 500px;
+    }
     .readingArea {
         margin: auto;
         width: 50%;
@@ -150,7 +223,8 @@ header {
     }
     .headerButtons {
         position: absolute;
-        top: 15px;
+        left: 0;
+        bottom: 10px;
         justify-content: start;
     }
 }
