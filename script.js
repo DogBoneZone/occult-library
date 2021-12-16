@@ -19,7 +19,7 @@ function createBookList() {
 
         let bookText = document.createElement('div')
         bookText.setAttribute('id', 'bookText')
-        bookText.textContent = `${library[element.dataset.index].title} by ${library[element.dataset.index].author}`
+        bookText.textContent = `"${library[element.dataset.index].title}" by ${library[element.dataset.index].author}`
         element.append(bookText)
 
         document.querySelector(".bookList").append(element)
@@ -87,6 +87,7 @@ function showBookList() {
 }
 
 function displayActiveContent(book) {
+
     // Create Book Content
     let readingArea = document.querySelector('.readingArea')
     let bookObject = library[book.dataset.index]
@@ -96,21 +97,17 @@ function displayActiveContent(book) {
     let hLine = document.createElement('hr')
     bookAuthorDiv.setAttribute('class', 'activeAuthor')
     bookAuthorDiv.textContent = `by ${bookObject.author}`
-    bookTitleElement.append(bookTitleText)
-    bookTitleElement.append(bookAuthorDiv)
-    bookTitleElement.append(hLine)
-
-
+    bookTitleElement.append(bookTitleText, bookAuthorDiv, hLine)
 
     // Create Book status tags
     let tagElement = document.createElement('div')
+    tagElement.setAttribute('class', 'bookTags')
     let pageCountTag = document.createElement('div')
     pageCountTag.textContent = `Length: ${bookObject.pageCount} pages`
     let readStatusTag = document.createElement('button')
     readStatusTag.setAttribute('class', 'readStatusButton')
     readStatusTag.textContent = bookObject.read ? 'Completed' : 'Unfinished'
     tagElement.append(readStatusTag, pageCountTag)
-    tagElement.setAttribute('class', 'bookTags')
 
     // Create div for Book Content and Tags to go into
     let element = document.createElement('div')
@@ -160,13 +157,14 @@ function listenActiveBook() {
 function listenReadStatusButton () {
     let readButton = document.querySelector('.readStatusButton')
     let activeBookIndex = document.querySelector('.activeBook').dataset.index
+    library[activeBookIndex].read ? readButton.style.backgroundColor = 'lightgreen' : readButton.style.backgroundColor = 'white'
     readButton.addEventListener('click', () => {
         library[activeBookIndex].read === true ? library[activeBookIndex].read = false : library[activeBookIndex].read = true
         readButton.textContent === 'Completed' ? readButton.textContent = 'Unfinished' : readButton.textContent = 'Completed'
-        if (readButton.textContent === 'Completed') {
+        if (library[activeBookIndex].read === true) {
             readButton.style.backgroundColor = 'lightgreen'
         } else {
-            readButton.style.backgroundColor = 'gray'
+            readButton.style.backgroundColor = 'white'
         }
     })
 }

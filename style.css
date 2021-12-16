@@ -17,6 +17,7 @@ html {
 }
 button {
     font-family: 'Occult';
+    border-radius: 10px;
 }
 body {
     position: relative;
@@ -28,7 +29,7 @@ body {
     margin: 0;
     padding: 0;
 }
-h1 {
+h1, h2, h3 {
     font-family: 'Occult'
 }
 
@@ -55,8 +56,8 @@ header {
 .headerButtons {
     display: flex;
     justify-content: center;
-    width: 100%;
-    padding: 0 0 10px 0;
+    align-items: center;
+    padding: 0 0 10px 10px;
     gap: 5px;
 }
 .headerButtons button {
@@ -153,9 +154,14 @@ header {
 
 .newBookForm {
     visibility: hidden;
-    position: sticky;
+    position: fixed;
     width: 300px;
+    height: 500px;
     margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     border: white solid 1px;
     background: #222f3e;
     display: flex;
@@ -193,6 +199,10 @@ header {
 }
 .closeButton {
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     top: 0;
     right: 0;
 }
