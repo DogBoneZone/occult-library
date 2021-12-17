@@ -23,7 +23,7 @@ function createBookList() {
 
         document.querySelector(".bookList").append(element)
 
-        // Create Edit/Remove Buttons
+        // Create Delete Book Buttons
         let btnRemove = document.createElement('button')
         btnRemove.setAttribute('class', 'removeBook')
         btnRemove.innerHTML = '<i class="fas fa-trash"></i>'
@@ -35,8 +35,6 @@ function createBookList() {
         btn.addEventListener('click', (e) => {
             let element = e.target.parentNode
             let index = Number(element.dataset.index)
-            console.log(library)
-            console.log(index)
             library.splice(index, 1)
             createBookList()
         })
@@ -86,41 +84,46 @@ function showBookList() {
 }
 
 function displayActiveContent(book) {
+    // Prevents error if book has not been added to library yet
+    if (!library[book.dataset.index]) {
+        console.log('book was deleted')
+    } else {
 
-    // Create Book Content
-    let readingArea = document.querySelector('.readingArea')
-    let bookObject = library[book.dataset.index]
-    let bookTitleElement = document.createElement('H1')
-    let bookTitleText = document.createTextNode(bookObject.title)
-    let bookAuthorDiv = document.createElement('div')
-    let hLine = document.createElement('hr')
-    bookAuthorDiv.setAttribute('class', 'activeAuthor')
-    bookAuthorDiv.textContent = `by ${bookObject.author}`
-    bookTitleElement.append(bookTitleText, bookAuthorDiv, hLine)
+        // Create Book Content
+        let readingArea = document.querySelector('.readingArea')
+        let bookObject = library[book.dataset.index]
+        let bookTitleElement = document.createElement('H1')
+        let bookTitleText = document.createTextNode(bookObject.title)
+        let bookAuthorDiv = document.createElement('div')
+        let hLine = document.createElement('hr')
+        bookAuthorDiv.setAttribute('class', 'activeAuthor')
+        bookAuthorDiv.textContent = `by ${bookObject.author}`
+        bookTitleElement.append(bookTitleText, bookAuthorDiv, hLine)
 
-    // Create Book status tags
-    let tagElement = document.createElement('div')
-    tagElement.setAttribute('class', 'bookTags')
-    let readStatusTag = document.createElement('button')
-    readStatusTag.setAttribute('class', 'readStatusButton tagBtn')
-    readStatusTag.textContent = bookObject.read ? 'Completed' : 'Unfinished'
-    let editContentBtn = document.createElement('button')
-    editContentBtn.setAttribute('class', 'editBtn tagBtn')
-    editContentBtn.innerHTML = `<i class="fas fa-edit"></i>`
-    tagElement.append(readStatusTag, editContentBtn)
+        // Create Book status tags
+        let tagElement = document.createElement('div')
+        tagElement.setAttribute('class', 'bookTags')
+        let readStatusTag = document.createElement('button')
+        readStatusTag.setAttribute('class', 'readStatusButton tagBtn')
+        readStatusTag.textContent = bookObject.read ? 'Completed' : 'Unfinished'
+        let editContentBtn = document.createElement('button')
+        editContentBtn.setAttribute('class', 'editBtn tagBtn')
+        editContentBtn.innerHTML = `<i class="fas fa-edit"></i>`
+        tagElement.append(readStatusTag, editContentBtn)
 
-    // Create div for Book Content and Tags to go into
-    let element = document.createElement('div')
-    element.setAttribute('id', 'activeContent')
-    element.innerHTML = bookObject.content
-    if (readingArea.childNodes.length > 0) {
-        while (readingArea.firstChild) {readingArea.removeChild(readingArea.firstChild)}
-        readingArea.append(tagElement, bookTitleElement, element)
-    } else {readingArea.append(tagElement, bookTitleElement, element)}
+        // Create div for Book Content and Tags to go into
+        let element = document.createElement('div')
+        element.setAttribute('id', 'activeContent')
+        element.innerHTML = bookObject.content
+        if (readingArea.childNodes.length > 0) {
+            while (readingArea.firstChild) {readingArea.removeChild(readingArea.firstChild)}
+            readingArea.append(tagElement, bookTitleElement, element)
+        } else {readingArea.append(tagElement, bookTitleElement, element)}
 
-    listenReadStatusButton()
-    listenEditContent()
-    listenUpdateBook()
+        listenReadStatusButton()
+        listenEditContent()
+        listenUpdateBook()
+    }
 }
 
 // Listeners
@@ -206,20 +209,19 @@ function listenEditContent() {
     })
 }
 
-// Issue that overwrites all library books on book update
 function listenUpdateBook() {
     let book = library[document.querySelector('.activeBook').dataset.index]
     let title = document.querySelector("#newTitle").value 
     let author = document.querySelector("#newAuthor").value
     let content = tinymce.activeEditor.getContent()
 
-    document.querySelector('#editBook').addEventListener('click', () => {
+    document.querySelector('#updateBook').addEventListener('click', () => {
         if (title === ''||author === ''||content === '') {
             document.querySelector('#missingInfo').style.visibility = 'visible'
         } else {
             book.title = document.querySelector('#newTitle').value
             book.author = document.querySelector('#newAuthor').value
-            book.content = tinymce.activeEditor.setContent(content)
+            book.content = tinymce.activeEditor.getContent(content)
             book.read = document.querySelector('#newCompleted').checked
             document.querySelector('#missingInfo').style.visibility = 'hidden'
             displayActiveContent(document.querySelector('.activeBook'))
