@@ -132,11 +132,12 @@ header {
 .bookTags {
     font-size: small;
     display: flex;
-    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     color: rgb(175, 175, 175);
 }
 
-.readStatusButton {
+.tagBtn {
     font-size: smaller;
     width: 75px;
 }
@@ -172,6 +173,12 @@ header {
 }
 .newBookForm input {
     width: 250px;
+}
+.newFormSubmit {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
 }
 .newBookForm button {
     padding: 5px;

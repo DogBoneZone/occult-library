@@ -1,10 +1,9 @@
 let library = [];
 
-function Book(title, author, content, pageCount, read) {
+function Book(title, author, content, read) {
     this.title = title
     this.author = author
     this.content = content
-    this.pageCount = pageCount
     this.read = read
 }
 
@@ -55,8 +54,8 @@ function createBookList() {
     listenActiveBook()
 }
 
-function addBook(title, author, content, pageCount, read) {
-    const newBook = new Book(title, author, content, pageCount, read)
+function addBook(title, author, content, read) {
+    const newBook = new Book(title, author, content, read)
     library.push(newBook)
     createBookList()
 
@@ -102,23 +101,26 @@ function displayActiveContent(book) {
     // Create Book status tags
     let tagElement = document.createElement('div')
     tagElement.setAttribute('class', 'bookTags')
-    let pageCountTag = document.createElement('div')
-    pageCountTag.textContent = `Length: ${bookObject.pageCount} pages`
     let readStatusTag = document.createElement('button')
-    readStatusTag.setAttribute('class', 'readStatusButton')
+    readStatusTag.setAttribute('class', 'readStatusButton tagBtn')
     readStatusTag.textContent = bookObject.read ? 'Completed' : 'Unfinished'
-    tagElement.append(readStatusTag, pageCountTag)
+    let editContentBtn = document.createElement('button')
+    editContentBtn.setAttribute('class', 'editBtn tagBtn')
+    editContentBtn.innerHTML = `<i class="fas fa-edit"></i>`
+    tagElement.append(readStatusTag, editContentBtn)
 
     // Create div for Book Content and Tags to go into
     let element = document.createElement('div')
     element.setAttribute('id', 'activeContent')
-    element.textContent = bookObject.content
+    element.innerHTML = bookObject.content
     if (readingArea.childNodes.length > 0) {
         while (readingArea.firstChild) {readingArea.removeChild(readingArea.firstChild)}
         readingArea.append(tagElement, bookTitleElement, element)
     } else {readingArea.append(tagElement, bookTitleElement, element)}
 
     listenReadStatusButton()
+    listenEditContent()
+    listenUpdateBook()
 }
 
 // Listeners
@@ -173,15 +175,56 @@ function listenSubmitBook() {
     document.querySelector("#submitBook").addEventListener("click", () => {
         let title = document.querySelector("#newTitle").value 
         let author = document.querySelector("#newAuthor").value
-        let content = document.querySelector("#newContent").value
-        let pageCount = document.querySelector('#newPageCount').value
+        let content = tinymce.activeEditor.getContent()
         let read = document.querySelector('#newCompleted').checked
 
-        if (title === ''||author === ''||content === ''||pageCount === '') {
+        if (title === ''||author === ''||content === '') {
             document.querySelector('#missingInfo').style.visibility = 'visible'
         } else {
-            addBook(title, author, content, pageCount, read)
+            addBook(title, author, content, read)
             document.querySelector('#missingInfo').style.visibility = 'hidden'
+            document.querySelector("#closeForm").click()
+        }
+    })
+}
+
+function listenEditContent() {
+    document.querySelector('.editBtn').addEventListener('click', () => {
+        let book = library[document.querySelector('.activeBook').dataset.index]
+        let title = book.title
+        let author = book.author
+        let content = book.content
+        let read = book.read
+
+        document.querySelector('#addBook').click()
+
+        document.querySelector('#newTitle').value = title
+        document.querySelector('#newAuthor').value = author
+        tinymce.activeEditor.setContent(content)
+        document.querySelector('#newCompleted').checked = read
+
+    })
+}
+
+// Issue that overwrites all library books on book update
+function listenUpdateBook() {
+    let book = library[document.querySelector('.activeBook').dataset.index]
+    let title = document.querySelector("#newTitle").value 
+    let author = document.querySelector("#newAuthor").value
+    let content = tinymce.activeEditor.getContent()
+
+    document.querySelector('#editBook').addEventListener('click', () => {
+        if (title === ''||author === ''||content === '') {
+            document.querySelector('#missingInfo').style.visibility = 'visible'
+        } else {
+            book.title = document.querySelector('#newTitle').value
+            book.author = document.querySelector('#newAuthor').value
+            book.content = tinymce.activeEditor.setContent(content)
+            book.read = document.querySelector('#newCompleted').checked
+            document.querySelector('#missingInfo').style.visibility = 'hidden'
+            displayActiveContent(document.querySelector('.activeBook'))
+            createBookList()
+            document.querySelector(`[data-index='${library.indexOf(book)}']`).classList.toggle('activeBook')
             document.querySelector("#closeForm").click()
         }
     })
